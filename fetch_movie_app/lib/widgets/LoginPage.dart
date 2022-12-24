@@ -1,4 +1,6 @@
 import 'package:fetch_movie_app/widgets/FogotPassPage.dart';
+import 'package:fetch_movie_app/widgets/Utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   bool isChecked = false;
 
+  @override
+  void dispose(){
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -76,6 +85,9 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(18),
                   ),
                 ),
+                style: TextStyle(
+                  color: Colors.black,
+                ),
               ),
             ),
             Padding(
@@ -105,6 +117,9 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(18),
                         borderSide: BorderSide.none
                     )
+                ),
+                style: TextStyle(
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -150,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 child: Text("Login",style: TextStyle(fontSize: 20),),
-                onPressed: (){},
+                onPressed: logIn,
               ),
             ),
 
@@ -187,4 +202,15 @@ class _LoginPageState extends State<LoginPage> {
       ),
     ),
   );
+
+  Future logIn ()async{
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(), password: passwordController.text.trim()
+      );
+    }on FirebaseAuthException catch(e){
+      print(e);
+      Utils.showSnackbar(e.message,false);
+    }
+  }
 }

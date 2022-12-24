@@ -1,5 +1,10 @@
 
+import 'package:fetch_movie_app/model/movieModel.dart';
+import 'package:fetch_movie_app/widgets/Utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 
 
 class HomePage extends StatefulWidget {
@@ -13,6 +18,20 @@ class _HomePageState extends State<HomePage> {
   void updateList(String movieName){
     print(movieName);
   }
+
+  Future<List<Movies>> movies = getMovies();
+
+  static Future<List<Movies>> getMovies() async {
+    const url = 'https://api.themoviedb.org/3/movie/popular?api_key=6cc529d2eeeff21654a884fba5c5eb58&language=en-US';
+    final response = await http.get(Uri.parse(url));
+
+    if(response.statusCode==200){
+      final body = welcomeFromJson(response.body);
+      return body.Map<Movies>(Movies.fromJson).toList();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Theme.of(context).backgroundColor,
@@ -126,6 +145,25 @@ class _HomePageState extends State<HomePage> {
                   )
               ),
             ),
+            Padding(
+                padding: EdgeInsets.all(8),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                  child: Text(
+                    'Sign Out',
+                    style: TextStyle(
+                        fontSize: 18,color:Colors.white
+                    ),
+                  ),
+                  onPressed: ()=>FirebaseAuth.instance.signOut(),
+                ),
+            )
           ],
         ),
       ),
@@ -151,4 +189,5 @@ class _HomePageState extends State<HomePage> {
       ],
     ),
   );
+
 }
