@@ -2,6 +2,7 @@ import 'package:fetch_movie_app/widgets/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,6 +11,7 @@ import 'package:fetch_movie_app/pages/HomePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -54,17 +56,15 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    // body: StreamBuilder<User?>(
-    //   stream: FirebaseAuth.instance.authStateChanges(),
-    //   builder: (context,snapshot){
-    //     if(snapshot.hasData){
-    //       return HomePage();
-    //     }else{
-    //       return AuthPage();
-    //     }
-    //   },
-    // ),
-
-    body: HomePage(),
+    body: StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context,snapshot){
+        if(snapshot.hasData){
+          return HomePage();
+        }else{
+          return AuthPage();
+        }
+      },
+    ),
   );
 }

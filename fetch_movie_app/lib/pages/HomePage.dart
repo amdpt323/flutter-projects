@@ -1,9 +1,12 @@
 
-import 'package:fetch_movie_app/model/movieModel.dart';
-import 'package:fetch_movie_app/widgets/Utils.dart';
+import 'package:fetch_movie_app/model/movie.dart';
+import 'package:fetch_movie_app/service/api_services.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
+import 'MovieDetail.dart';
+
 
 
 
@@ -17,20 +20,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   void updateList(String movieName){
     print(movieName);
+
   }
 
-  Future<List<Movies>> movies = getMovies();
+  Future <List<Movie>> popularMovies = ApiService().getMovie('popular');
+  Future <List<Movie>> topRatedMovies = ApiService().getMovie('top_rated');
+  Future <List<Movie>> nowPlayingMovies = ApiService().getMovie('now_playing');
 
-  static Future<List<Movies>> getMovies() async {
-    const url = 'https://api.themoviedb.org/3/movie/popular?api_key=6cc529d2eeeff21654a884fba5c5eb58&language=en-US';
-    final response = await http.get(Uri.parse(url));
-
-    if(response.statusCode==200){
-      final body = welcomeFromJson(response.body);
-      return body.Map<Movies>(Movies.fromJson).toList();
-    }
+  @override
+  void dispose(){
+    super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -46,25 +46,48 @@ class _HomePageState extends State<HomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) => updateList(value),
-                style: TextStyle(color:Colors.black),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Color.fromRGBO(205,217,229,1),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
+              child: Row(
+
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 250,
+                    child: TextField(
+                      onChanged: (value) => updateList(value),
+                      style: TextStyle(color:Colors.black),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Color.fromRGBO(205,217,229,1),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: Theme.of(context).colorScheme.primary,
+                            )
+                        ),
+                        hintText: 'e.g. Stranger Things',
+                        hintStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                        prefixIcon: Icon(Icons.search,color: Colors.black),
+                      ),
+                    ),
                   ),
-                  hintText: 'e.g. Stranger Things',
-                  hintStyle: TextStyle(
-                    color: Colors.black,
-                  ),
-                  prefixIcon: Icon(Icons.search),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: ElevatedButton(
+                        onPressed: ()=>FirebaseAuth.instance.signOut(),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40)
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
+                          backgroundColor: Colors.red,
+                        ),
+                        child: Text("SignOut",style: TextStyle(color: Colors.white,fontSize: 15),),
+                    ),
+                  )
+                ],
               ),
             ),
             Padding(
@@ -85,12 +108,17 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 height: 200,
-                child:ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 6,
-                  separatorBuilder: (context,_)=>const SizedBox(width: 12),
-                  itemBuilder: (context,index)=>buildCard('https://i.pinimg.com/736x/59/85/80/59858064a5695c9e0bbd2f91855a1127.jpg'),
-                )
+                child: FutureBuilder<List<Movie>>(
+                  future: popularMovies,
+                  builder: (context,snapshot){
+                    if(snapshot.hasData){
+                      final movie = snapshot.data!;
+                      return buildMovie(movie);
+                    }else{
+                      return const Text('No movie data');
+                    }
+                  },
+                ),
               ),
             ),
             Padding(
@@ -111,12 +139,17 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                   height: 200,
-                  child:ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 6,
-                    separatorBuilder: (context,_)=>const SizedBox(width: 12),
-                    itemBuilder: (context,index)=>buildCard('https://w0.peakpx.com/wallpaper/586/179/HD-wallpaper-naruto-kid-thumbnail.jpg'),
-                  )
+                child: FutureBuilder<List<Movie>>(
+                  future: topRatedMovies,
+                  builder: (context,snapshot){
+                    if(snapshot.hasData){
+                      final movie = snapshot.data!;
+                      return buildMovie(movie);
+                    }else{
+                      return const Text('No movie data');
+                    }
+                  },
+                ),
               ),
             ),
             Padding(
@@ -137,38 +170,64 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                   height: 200,
-                  child:ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 6,
-                    separatorBuilder: (context,_)=>const SizedBox(width: 12),
-                    itemBuilder: (context,index)=>buildCard('https://w7.pngwing.com/pngs/28/1007/png-transparent-naruto-uzumaki-sasuke-uchiha-chibi-kurama-naruto-child-face-orange.png'),
-                  )
+                child: FutureBuilder<List<Movie>>(
+                  future: nowPlayingMovies,
+                  builder: (context,snapshot){
+                    if(snapshot.hasData){
+                      final movie = snapshot.data!;
+                      return buildMovie(movie);
+                    }else{
+                      return const Text('No movie data');
+                    }
+                  },
+                ),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.all(8),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                  child: Text(
-                    'Sign Out',
-                    style: TextStyle(
-                        fontSize: 18,color:Colors.white
-                    ),
-                  ),
-                  onPressed: ()=>FirebaseAuth.instance.signOut(),
-                ),
-            )
+            // Padding(
+            //     padding: EdgeInsets.all(8),
+            //     child: ElevatedButton(
+            //       style: ElevatedButton.styleFrom(
+            //         minimumSize: Size.fromHeight(50),
+            //         shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(18),
+            //         ),
+            //         backgroundColor: Colors.red,
+            //       ),
+            //       child: Text(
+            //         'Sign Out',
+            //         style: TextStyle(
+            //             fontSize: 18,color:Colors.white
+            //         ),
+            //       ),
+            //       onPressed: ()=>FirebaseAuth.instance.signOut(),
+            //     ),
+            // )
           ],
         ),
       ),
     ),
   );
+
+  Widget buildMovie(List<Movie> movies) => ListView.separated(
+    scrollDirection: Axis.horizontal,
+      itemCount: movies.length,
+      separatorBuilder: (context,_)=>const SizedBox(width: 12),
+      itemBuilder: (context,index) {
+        final movie = movies[index];
+        final path = movie.posterPath;
+        return GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder:(context) => MovieDetail(moviedetail : movie),
+                  )
+              );
+            },
+            child: buildCard('https://image.tmdb.org/t/p/w500$path')
+        );
+      },
+  );
+
 
   Widget buildCard(url) => Container(
     width: 200,

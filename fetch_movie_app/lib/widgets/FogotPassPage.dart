@@ -1,4 +1,7 @@
 
+import 'package:email_validator/email_validator.dart';
+import 'package:fetch_movie_app/widgets/Utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -11,6 +14,12 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
 
   final emailController = TextEditingController();
+
+  @override
+  void dispose(){
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -55,6 +64,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
                 controller: emailController,
+                style: TextStyle(color: Colors.black,fontSize: 20),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color.fromRGBO(205,217,229,1),
@@ -62,7 +72,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(18),
                   ),
-                )
+                ),
+                validator: (email) =>
+                    email!=null && !EmailValidator.validate(email)
+                        ? 'Enter A Valid Email'
+                        :null,
+
               ),
             ),
             Padding(
@@ -78,7 +93,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     "Send Email",
                     style: TextStyle(fontSize: 20),
                 ),
-                onPressed: (){},
+                onPressed: resetPassword,
               ),
             )
           ],
@@ -86,4 +101,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       ),
     )
   );
+
+  Future resetPassword () async{
+
+    try{
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+          email: emailController.text.trim(),
+      );
+      Utils.showSnackbar('Password Email Sent Successfully', true);
+    } on FirebaseAuthException catch(e) {
+      Utils.showSnackbar(e.message, false);
+    }
+  }
 }
