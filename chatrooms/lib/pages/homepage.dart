@@ -100,7 +100,6 @@ class _HomePageState extends State<HomePage> {
     if(isValid) {
       try {
         dynamic result = await FirebaseAuth.instance.signInAnonymously();
-        debugPrint(result.user);
         Utils.showSnackbar("Logged in succesfully", true);
       } on FirebaseAuthException catch (e) {
         Utils.showSnackbar(e.message, false);
