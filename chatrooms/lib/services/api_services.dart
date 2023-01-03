@@ -6,7 +6,7 @@ class ApiService {
 
   Future<List<Message>> getMessages(String text) async{
     try{
-      final response = await _db.collection(text).orderBy('createdAt').get();
+      final response = await _db.collection(text).orderBy('createdAt',descending: true).get();
       var messages = response.docs as List;
       List<Message> messsageList  = messages.map((m)=>Message.fromJson(m)).toList();
       return messsageList;

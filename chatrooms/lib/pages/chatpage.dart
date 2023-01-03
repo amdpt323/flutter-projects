@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:chatrooms/services/api_services.dart';
 import 'package:chatrooms/widgets/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,8 +23,17 @@ class _chatpageState extends State<chatpage> {
 
 
   Future<List<Message>> displayMessages = ApiService().getMessages("programming");
+  Timer ? _timer;
 
-
+  @override
+  void initState(){
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1),(timer){
+      setState(() {
+        displayMessages = ApiService().getMessages(pageHeader);
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) =>Scaffold(
       backgroundColor:Colors.black,
@@ -61,6 +72,7 @@ class _chatpageState extends State<chatpage> {
                               final messages = snapshot.data!;
                               return ListView.builder(
                                 scrollDirection: Axis.vertical,
+                                reverse: true,
                                 itemCount: messages.length,
                                 itemBuilder: (context,index){
                                   final message = messages[index];
