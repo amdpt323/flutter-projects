@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
         key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 200,
@@ -49,6 +50,14 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(
               height: 150,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 16),
+              child: const SizedBox(
+                child: Text(
+                  "Create A Username",
+                  style:TextStyle(color: Colors.grey,fontSize: 18) ,),
+              ),
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),

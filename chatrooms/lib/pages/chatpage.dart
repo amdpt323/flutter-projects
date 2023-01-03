@@ -51,7 +51,7 @@ class _chatpageState extends State<chatpage> {
                     SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: Container(
-                        height: 650,
+                        height: 550,
                         width: MediaQuery.of(context).size.width-80,
                         color: Theme.of(context).backgroundColor,
                         child: FutureBuilder<List<Message>>(
