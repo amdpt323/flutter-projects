@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ivy_match_p1/Utils/utils.dart';
 import 'package:ivy_match_p1/pages/addUser.dart';
+import 'package:ivy_match_p1/pages/renderForm.dart';
+import 'package:ivy_match_p1/pages/renderUsers.dart';
 import 'package:ivy_match_p1/pages/viewUsers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -80,6 +82,42 @@ class MyHomePage extends StatelessWidget {
             onPressed: (){
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=>ViewUsers())
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            child: Text("Render Form",style: TextStyle(fontSize: 20),),
+            style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+                backgroundColor: Theme.of(context).accentColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18)
+                )
+            ),
+            onPressed: (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context)=>RenderForm())
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            child: Text("Display Users",style: TextStyle(fontSize: 20),),
+            style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromHeight(50),
+                backgroundColor: Theme.of(context).accentColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18)
+                )
+            ),
+            onPressed: (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context)=>RenderUsers())
               );
             },
           ),
