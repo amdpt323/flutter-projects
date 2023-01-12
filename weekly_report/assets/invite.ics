@@ -1,0 +1,54 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Asia/Kolkata
+X-LIC-LOCATION:Asia/Kolkata
+BEGIN:STANDARD
+TZOFFSETFROM:+0530
+TZOFFSETTO:+0530
+TZNAME:IST
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Asia/Kolkata:20230107T180000
+DTEND;TZID=Asia/Kolkata:20230107T183000
+DTSTAMP:20230107T115044Z
+ORGANIZER;CN=rajat@getivymatch.com:mailto:rajat@getivymatch.com
+UID:j5gkecmofilsh7dsdlq16vl1og@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=samandeep21@iitk.ac.in;X-NUM-GUESTS=0:mailto:samandeep21@iitk.ac.in
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE
+ ;CN=rajat@getivymatch.com;X-NUM-GUESTS=0:mailto:rajat@getivymatch.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=rahulkumar.iitb@gmail.com;X-NUM-GUESTS=0:mailto:rahulkumar.iitb@gma
+ il.com
+X-GOOGLE-CONFERENCE:https://meet.google.com/tbj-tsvm-vjz
+X-MICROSOFT-CDO-OWNERAPPTID:956029888
+CREATED:20230104T173349Z
+DESCRIPTION:Event Name: Internship Interview\n\nPlease book a 30-min interv
+ iew slot for next round of discussion for flutter/UX intern role\n\nLocatio
+ n: This is a Google Meet web conference.\nYou can join this meeting from yo
+ ur computer\, tablet\, or smartphone.\nhttps://calendly.com/events/b8400619
+ -2d4b-4613-a387-2eced5bb8f81/google_meet\n\nNeed to make changes to this ev
+ ent?\nCancel: https://calendly.com/cancellations/e1ed2b08-9d71-4eb7-a727-c1
+ 387eef78e7\nReschedule: https://calendly.com/reschedulings/e1ed2b08-9d71-4e
+ b7-a727-c1387eef78e7\n\nPowered by Calendly.com\n\n\n-::~:~::~:~:~:~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-\nJoin wit
+ h Google Meet: https://meet.google.com/tbj-tsvm-vjz\nOr dial: (US) +1 402-2
+ 77-8056 PIN: 820521945#\nMore phone numbers: https://tel.meet/tbj-tsvm-vjz?
+ pin=9029975413704&hs=7\n\nLearn more about Meet at: https://support.google.
+ com/a/users/answer/9282720\n\nPlease do not edit this section.\n-::~:~::~:~
+ :~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::
+ -
+LAST-MODIFIED:20230107T115042Z
+LOCATION:Google Meet (instructions in description)
+SEQUENCE:1
+STATUS:CONFIRMED
+SUMMARY:S Amandeep and Rajat Singh
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
